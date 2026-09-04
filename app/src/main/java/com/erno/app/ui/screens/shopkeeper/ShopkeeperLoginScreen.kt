@@ -22,6 +22,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.erno.app.ui.components.GoogleSignInButton
 import com.erno.app.ui.theme.ErnoLime
 import com.erno.app.ui.theme.ErnoTextSecondary
 
@@ -30,7 +31,8 @@ import com.erno.app.ui.theme.ErnoTextSecondary
 fun ShopkeeperLoginScreen(
     onBackClick: () -> Unit,
     onSendOTP: (String) -> Unit,
-    onCreateAccount: () -> Unit
+    onCreateAccount: () -> Unit,
+    onGoogleSignInClick: () -> Unit = {}
 ) {
     var phoneNumber by remember { mutableStateOf("") }
 
@@ -72,7 +74,7 @@ fun ShopkeeperLoginScreen(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(200.dp)
+                    .height(180.dp)
                     .padding(horizontal = 24.dp),
                 contentAlignment = Alignment.BottomCenter
             ) {
@@ -80,20 +82,20 @@ fun ShopkeeperLoginScreen(
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(160.dp)
+                        .height(140.dp)
                         .background(Color(0xFFF1F8E9), RoundedCornerShape(20.dp)),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
                         imageVector = Icons.Default.Storefront,
                         contentDescription = null,
-                        modifier = Modifier.size(80.dp),
+                        modifier = Modifier.size(70.dp),
                         tint = ErnoLime.copy(alpha = 0.4f)
                     )
                 }
             }
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
             // Main Login Card
             Surface(
@@ -105,13 +107,13 @@ fun ShopkeeperLoginScreen(
                 shadowElevation = 8.dp
             ) {
                 Column(
-                    modifier = Modifier.padding(24.dp),
+                    modifier = Modifier.padding(20.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     // Circular Icon
                     Box(
                         modifier = Modifier
-                            .size(64.dp)
+                            .size(56.dp)
                             .background(Color(0xFFF1F8E9), CircleShape),
                         contentAlignment = Alignment.Center
                     ) {
@@ -119,35 +121,35 @@ fun ShopkeeperLoginScreen(
                             imageVector = Icons.Default.Storefront,
                             contentDescription = null,
                             tint = ErnoLime,
-                            modifier = Modifier.size(32.dp)
+                            modifier = Modifier.size(28.dp)
                         )
                     }
 
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(12.dp))
 
                     Text(
                         text = "Enter Mobile Number",
-                        fontSize = 22.sp,
+                        fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color.Black
                     )
 
-                    Spacer(modifier = Modifier.height(8.dp))
+                    Spacer(modifier = Modifier.height(6.dp))
 
                     Text(
                         text = "We will send you an OTP to verify\nyour mobile number.",
-                        fontSize = 14.sp,
+                        fontSize = 13.sp,
                         color = ErnoTextSecondary,
                         textAlign = TextAlign.Center
                     )
 
-                    Spacer(modifier = Modifier.height(24.dp))
+                    Spacer(modifier = Modifier.height(20.dp))
 
                     // Phone Input
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(56.dp)
+                            .height(52.dp)
                             .border(1.dp, Color.LightGray, RoundedCornerShape(12.dp)),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
@@ -197,14 +199,14 @@ fun ShopkeeperLoginScreen(
                         )
                     }
 
-                    Spacer(modifier = Modifier.height(24.dp))
+                    Spacer(modifier = Modifier.height(16.dp))
 
                     // Send OTP Button
                     Button(
                         onClick = { onSendOTP(phoneNumber) },
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(56.dp),
+                            .height(50.dp),
                         colors = ButtonDefaults.buttonColors(containerColor = ErnoLime),
                         shape = RoundedCornerShape(12.dp),
                         enabled = phoneNumber.length == 10
@@ -216,10 +218,41 @@ fun ShopkeeperLoginScreen(
                             fontSize = 16.sp
                         )
                     }
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    // OR Divider
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        HorizontalDivider(
+                            modifier = Modifier.weight(1f),
+                            color = Color(0xFFE0E0E0)
+                        )
+                        Text(
+                            text = "  OR  ",
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.Gray
+                        )
+                        HorizontalDivider(
+                            modifier = Modifier.weight(1f),
+                            color = Color(0xFFE0E0E0)
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    // Google Sign In Button
+                    GoogleSignInButton(
+                        text = "Sign in with Google",
+                        onClick = onGoogleSignInClick
+                    )
                 }
             }
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(20.dp))
 
             // Create Account Link
             Row(
@@ -248,7 +281,7 @@ fun ShopkeeperLoginScreen(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 32.dp),
+                    .padding(bottom = 24.dp),
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
             ) {

@@ -166,9 +166,9 @@ fun RegisterScreen(
                     onClick = { onRegisterClick(phoneNumber, selectedRole) },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(52.dp),
+                        .height(50.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = ErnoGreen),
-                    shape = RoundedCornerShape(14.dp),
+                    shape = RoundedCornerShape(12.dp),
                     enabled = fullName.isNotBlank() && phoneNumber.length == 10
                 ) {
                     Text(
@@ -179,7 +179,37 @@ fun RegisterScreen(
                     )
                 }
 
-                Spacer(modifier = Modifier.height(20.dp))
+                Spacer(modifier = Modifier.height(14.dp))
+
+                // OR Divider
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    HorizontalDivider(
+                        modifier = Modifier.weight(1f),
+                        color = Color(0xFFE0E0E0)
+                    )
+                    Text(
+                        text = "  OR  ",
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Gray
+                    )
+                    HorizontalDivider(
+                        modifier = Modifier.weight(1f),
+                        color = Color(0xFFE0E0E0)
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(14.dp))
+
+                com.erno.app.ui.components.GoogleSignInButton(
+                    text = "Sign up with Google",
+                    onClick = { /* Google Sign In */ }
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
 
                 Row(
                     modifier = Modifier.clickable { onLoginClick() },

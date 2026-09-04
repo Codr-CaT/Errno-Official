@@ -28,6 +28,16 @@ sealed class Screen(val route: String) {
     object WorkerEarnings : Screen("worker_earnings")
     object WorkerProfile : Screen("worker_profile")
 
+    // Payment Gateway Routes
+    object PaymentCheckout : Screen("payment_checkout/{amount}?jobTitle={jobTitle}") {
+        fun createRoute(amount: Int, jobTitle: String = "Shift Payment") =
+            "payment_checkout/$amount?jobTitle=$jobTitle"
+    }
+    object PaymentSuccess : Screen("payment_success/{txnId}?amount={amount}") {
+        fun createRoute(txnId: String, amount: Int = 268) =
+            "payment_success/$txnId?amount=$amount"
+    }
+
     // Existing routes
     object Home : Screen("home")
     object Analysis : Screen("analysis")

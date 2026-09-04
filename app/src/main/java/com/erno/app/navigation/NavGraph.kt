@@ -12,6 +12,8 @@ import com.erno.app.ui.components.WorkerTab
 import com.erno.app.ui.screens.auth.RegisterScreen
 import com.erno.app.ui.screens.auth.VerifyOTPScreen
 import com.erno.app.ui.screens.home.HomeScreen
+import com.erno.app.ui.screens.payment.PaymentCheckoutScreen
+import com.erno.app.ui.screens.payment.PaymentSuccessScreen
 import com.erno.app.ui.screens.role.Role
 import com.erno.app.ui.screens.role.RoleSelectionScreen
 import com.erno.app.ui.screens.shopkeeper.*
@@ -198,9 +200,7 @@ fun NavGraph(navController: NavHostController) {
                 },
                 onPostJobClick = {
                     shopkeeperViewModel.postJob()
-                    navController.navigate(Screen.JobSuccess.route) {
-                        popUpTo(Screen.ShopkeeperHome.route)
-                    }
+                    navController.navigate("payment_checkout/250?jobTitle=${shopkeeperState.draftTitle.ifBlank { "Job Posting Fee" }}")
                 }
             )
         }
@@ -373,6 +373,52 @@ fun NavGraph(navController: NavHostController) {
                         WorkerTab.MY_JOBS -> navController.navigate(Screen.WorkerMyJobs.route)
                         WorkerTab.EARNINGS -> navController.navigate(Screen.WorkerEarnings.route)
                         WorkerTab.PROFILE -> { /* Already here */ }
+                    }
+                }
+            )
+        }
+
+        // Payment Gateway Routes
+        composable(
+            route = "payment_checkout/{amount}?jobTitle={jobTitle}",
+            arguments = listOf(
+                navArgument("amount") { type = NavType.IntType; defaultValue = 250 },
+                navArgument("jobTitle") { type = NavType.StringType; defaultValue = "Shift Payment" }
+            )
+        ) { backStackEntry ->
+            val amount = backStackEntry.arguments?.getInt("amount") ?: 250
+            val jobTitle = backStackEntry.arguments?.getString("jobTitle") ?: "Shift Payment"
+
+            PaymentCheckoutScreen(
+                amount = amount,
+                jobTitle = jobTitle,
+                onBackClick = {
+                    navController.popBackStack()
+                },
+                onPaymentSuccess = { txnId ->
+                    navController.navigate("payment_success/$txnId?amount=${amount + 18}") {
+                        popUpTo(Screen.RoleSelection.route)
+                    }
+                }
+            )
+        }
+
+        composable(
+            route = "payment_success/{txnId}?amount={amount}",
+            arguments = listOf(
+                navArgument("txnId") { type = NavType.StringType; defaultValue = "TXN_88492018" },
+                navArgument("amount") { type = NavType.IntType; defaultValue = 268 }
+            )
+        ) { backStackEntry ->
+            val txnId = backStackEntry.arguments?.getString("txnId") ?: "TXN_88492018"
+            val amount = backStackEntry.arguments?.getInt("amount") ?: 268
+
+            PaymentSuccessScreen(
+                transactionId = txnId,
+                amount = amount,
+                onDoneClick = {
+                    navController.navigate(Screen.ShopkeeperHome.route) {
+                        popUpTo(Screen.RoleSelection.route) { inclusive = true }
                     }
                 }
             )
