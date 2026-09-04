@@ -17,7 +17,7 @@ fun ErnoLogo(
     modifier: Modifier = Modifier
 ) {
     Image(
-        painter = painterResource(id = R.drawable.erno_logo),
+        painter = painterResource(R.drawable.erno_logo),
         contentDescription = "ERNO Logo",
         modifier = modifier,
         contentScale = ContentScale.Fit
@@ -25,20 +25,29 @@ fun ErnoLogo(
 }
 
 // These are now marked as Deprecated and should be removed once all screens are updated.
+@Deprecated(
+    message = "Use ErnoLogo() which contains the official wordmark",
+    replaceWith = ReplaceWith("ErnoLogo(modifier)")
+)
 @Composable
-@Deprecated("Use ErnoLogo() which contains the official wordmark")
 fun ErnoWordmark(modifier: Modifier = Modifier) {
     ErnoLogo(modifier = modifier)
 }
 
+@Deprecated(
+    message = "Use ErnoLogo() which contains the official vertical layout",
+    replaceWith = ReplaceWith("ErnoLogo(modifier)")
+)
 @Composable
-@Deprecated("Use ErnoLogo() which contains the official vertical layout")
 fun ErnoBrandingVertical(modifier: Modifier = Modifier) {
     ErnoLogo(modifier = modifier)
 }
 
+@Deprecated(
+    message = "Use ErnoLogo() which contains the official horizontal branding",
+    replaceWith = ReplaceWith("ErnoLogo(modifier)")
+)
 @Composable
-@Deprecated("Use ErnoLogo() which contains the official horizontal branding")
 fun ErnoBrandingHorizontal(modifier: Modifier = Modifier) {
     ErnoLogo(modifier = modifier)
 }

@@ -3,6 +3,8 @@ package com.erno.app.ui.theme
 import androidx.compose.ui.graphics.Color
 
 val ErnoLime = Color(0xFFA4E637)
+val ErnoGreen = Color(0xFF5B9600)
+val ErnoGreenLight = Color(0xFFEAF5D8)
 val ErnoNavy = Color(0xFF0B121F)
 val ErnoBackground = Color(0xFFF8F9FA)
 val ErnoSurface = Color(0xFFFFFFFF)

@@ -184,7 +184,10 @@ fun WorkerLoginScreen(
                             placeholder = { Text("Mobile number", color = Color.Gray) },
                             modifier = Modifier.fillMaxWidth(),
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
+                            textStyle = LocalTextStyle.current.copy(color = Color.Black, fontSize = 16.sp),
                             colors = TextFieldDefaults.colors(
+                                focusedTextColor = Color.Black,
+                                unfocusedTextColor = Color.Black,
                                 focusedContainerColor = Color.Transparent,
                                 unfocusedContainerColor = Color.Transparent,
                                 focusedIndicatorColor = Color.Transparent,

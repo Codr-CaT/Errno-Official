@@ -1,10 +1,8 @@
 package com.erno.app.ui.screens.auth
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -22,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.erno.app.ui.screens.role.Role
 import com.erno.app.ui.screens.role.RoleCard
+import com.erno.app.ui.theme.ErnoGreen
 import com.erno.app.ui.theme.ErnoLime
 import com.erno.app.ui.theme.ErnoTextSecondary
 
@@ -91,18 +90,18 @@ fun RegisterScreen(
                     color = ErnoTextSecondary
                 )
 
-                Spacer(modifier = Modifier.height(32.dp))
+                Spacer(modifier = Modifier.height(24.dp))
 
                 // Role Selection
                 Text(
                     text = "I want to register as",
                     modifier = Modifier.fillMaxWidth(),
-                    fontSize = 16.sp,
+                    fontSize = 15.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.Black
                 )
 
-                Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(10.dp))
 
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -118,18 +117,25 @@ fun RegisterScreen(
                     }
                 }
 
-                Spacer(modifier = Modifier.height(32.dp))
+                Spacer(modifier = Modifier.height(24.dp))
 
                 // Input Fields
                 OutlinedTextField(
                     value = fullName,
                     onValueChange = { fullName = it },
-                    label = { Text("Full Name") },
-                    placeholder = { Text("e.g. John Doe") },
+                    label = { Text("Full Name", color = Color.Gray) },
+                    placeholder = { Text("e.g. John Doe", color = Color.Gray) },
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp),
                     singleLine = true,
-                    leadingIcon = { Icon(Icons.Default.Person, contentDescription = null, tint = ErnoLime) }
+                    textStyle = LocalTextStyle.current.copy(color = Color.Black),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedTextColor = Color.Black,
+                        unfocusedTextColor = Color.Black,
+                        focusedBorderColor = ErnoGreen,
+                        unfocusedBorderColor = Color(0xFFD0D0D0)
+                    ),
+                    leadingIcon = { Icon(Icons.Default.Person, contentDescription = null, tint = ErnoGreen) }
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
@@ -137,36 +143,43 @@ fun RegisterScreen(
                 OutlinedTextField(
                     value = phoneNumber,
                     onValueChange = { if (it.length <= 10) phoneNumber = it },
-                    label = { Text("Mobile Number") },
-                    placeholder = { Text("98765 43210") },
-                    prefix = { Text("+91 ") },
+                    label = { Text("Mobile Number", color = Color.Gray) },
+                    placeholder = { Text("98765 43210", color = Color.Gray) },
+                    prefix = { Text("+91 ", color = Color.Black, fontWeight = FontWeight.Bold) },
                     modifier = Modifier.fillMaxWidth(),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
                     shape = RoundedCornerShape(12.dp),
                     singleLine = true,
-                    leadingIcon = { Icon(Icons.Default.Phone, contentDescription = null, tint = ErnoLime) }
+                    textStyle = LocalTextStyle.current.copy(color = Color.Black),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedTextColor = Color.Black,
+                        unfocusedTextColor = Color.Black,
+                        focusedBorderColor = ErnoGreen,
+                        unfocusedBorderColor = Color(0xFFD0D0D0)
+                    ),
+                    leadingIcon = { Icon(Icons.Default.Phone, contentDescription = null, tint = ErnoGreen) }
                 )
 
-                Spacer(modifier = Modifier.height(32.dp))
+                Spacer(modifier = Modifier.height(28.dp))
 
                 Button(
                     onClick = { onRegisterClick(phoneNumber, selectedRole) },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(56.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = ErnoLime),
+                        .height(52.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = ErnoGreen),
                     shape = RoundedCornerShape(14.dp),
                     enabled = fullName.isNotBlank() && phoneNumber.length == 10
                 ) {
                     Text(
                         text = "Create Account",
-                        color = Color.Black,
+                        color = Color.White,
                         fontWeight = FontWeight.Bold,
                         fontSize = 16.sp
                     )
                 }
 
-                Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = Modifier.height(20.dp))
 
                 Row(
                     modifier = Modifier.clickable { onLoginClick() },
@@ -179,7 +192,7 @@ fun RegisterScreen(
                     )
                     Text(
                         text = "Login",
-                        color = ErnoLime,
+                        color = ErnoGreen,
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Bold
                     )
@@ -190,7 +203,7 @@ fun RegisterScreen(
                 // Safety Info
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.padding(bottom = 32.dp)
+                    modifier = Modifier.padding(bottom = 24.dp)
                 ) {
                     Icon(
                         imageVector = Icons.Default.Shield,
