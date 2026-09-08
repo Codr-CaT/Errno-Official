@@ -56,24 +56,8 @@ data class ShopkeeperState(
                 DurationPay(2, 189)
             ),
             status = "Active",
-            postedTime = "13Sep0",
-            applicantsCount = 2
-        ),
-        JobPost(
-            id = "4",
-            title = "Packing Staff",
-            category = "Packing Staff",
-            location = "Okhla Market Area",
-            description = "Help with item packing and shipping dispatch preparation.",
-            payStructure = listOf(
-                DurationPay(1, 99),
-                DurationPay(2, 189),
-                DurationPay(3, 279),
-                DurationPay(4, 349)
-            ),
-            status = "Completed",
             postedTime = "Posted 3d ago",
-            applicantsCount = 0
+            applicantsCount = 2
         )
     ),
     // Draft job for creation
@@ -114,6 +98,27 @@ class ShopkeeperViewModel : ViewModel() {
         _uiState.update { it.copy(draftDescription = description) }
     }
 
+    fun resetDraft() {
+        _uiState.update {
+            it.copy(
+                draftTitle = "Shop Helper",
+                draftCategory = "Shop Helper",
+                draftLocation = "Okhla Market Area",
+                draftDescription = "Need a shop helper for assisting in customer handling and store work.",
+                draftPayStructure = listOf(
+                    DurationPay(1, 99),
+                    DurationPay(2, 189),
+                    DurationPay(3, 279),
+                    DurationPay(4, 349),
+                    DurationPay(5, 419),
+                    DurationPay(6, 489),
+                    DurationPay(7, 559),
+                    DurationPay(8, 629)
+                )
+            )
+        }
+    }
+
     fun removeDurationPay(item: DurationPay) {
         _uiState.update { state ->
             itCopy(state, draftPayStructure = state.draftPayStructure.filter { dp -> dp.hours != item.hours })
@@ -144,8 +149,8 @@ class ShopkeeperViewModel : ViewModel() {
             title = state.draftTitle.ifBlank { "Shop Helper" },
             category = state.draftCategory.ifBlank { "Shop Helper" },
             location = state.draftLocation.ifBlank { "Okhla Market Area" },
-            description = state.draftDescription,
-            payStructure = state.draftPayStructure,
+            description = state.draftDescription.ifBlank { "Need a shop helper for store work." },
+            payStructure = if (state.draftPayStructure.isNotEmpty()) state.draftPayStructure else listOf(DurationPay(1, 99), DurationPay(2, 189)),
             status = "Active",
             postedTime = "Posted just now",
             applicantsCount = 0

@@ -200,13 +200,22 @@ fun PayStructureScreen(
     editingItem?.let { item ->
         AlertDialog(
             onDismissRequest = { editingItem = null },
-            title = { Text("Edit Pay for ${item.hours} Hour(s)") },
+            title = { Text("Edit Pay for ${item.hours} Hour(s)", color = Color.Black) },
             text = {
                 OutlinedTextField(
                     value = editPriceText,
                     onValueChange = { editPriceText = it },
-                    label = { Text("Price (₹)") },
+                    label = { Text("Price (₹)", color = Color.Gray) },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    textStyle = LocalTextStyle.current.copy(color = Color.Black),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedTextColor = Color.Black,
+                        unfocusedTextColor = Color.Black,
+                        focusedBorderColor = ErnoGreen,
+                        unfocusedBorderColor = Color(0xFFE0E0E0),
+                        focusedContainerColor = Color.White,
+                        unfocusedContainerColor = Color.White
+                    ),
                     singleLine = true
                 )
             },

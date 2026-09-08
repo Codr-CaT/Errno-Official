@@ -120,9 +120,13 @@ fun PostJobScreen(
                     OutlinedTextField(
                         value = state.draftTitle,
                         onValueChange = onTitleChange,
+                        placeholder = { Text("e.g. Shop Helper", color = Color.Gray) },
+                        textStyle = LocalTextStyle.current.copy(color = Color.Black),
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(10.dp),
                         colors = OutlinedTextFieldDefaults.colors(
+                            focusedTextColor = Color.Black,
+                            unfocusedTextColor = Color.Black,
                             focusedBorderColor = ErnoGreen,
                             unfocusedBorderColor = Color(0xFFE0E0E0),
                             focusedContainerColor = Color.White,
@@ -154,14 +158,18 @@ fun PostJobScreen(
                             trailingIcon = {
                                 Icon(
                                     imageVector = Icons.Default.KeyboardArrowDown,
-                                    contentDescription = null
+                                    contentDescription = null,
+                                    tint = Color.Black
                                 )
                             },
+                            textStyle = LocalTextStyle.current.copy(color = Color.Black),
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .menuAnchor(),
                             shape = RoundedCornerShape(10.dp),
                             colors = OutlinedTextFieldDefaults.colors(
+                                focusedTextColor = Color.Black,
+                                unfocusedTextColor = Color.Black,
                                 focusedBorderColor = ErnoGreen,
                                 unfocusedBorderColor = Color(0xFFE0E0E0),
                                 focusedContainerColor = Color.White,
@@ -174,7 +182,7 @@ fun PostJobScreen(
                         ) {
                             categories.forEach { category ->
                                 DropdownMenuItem(
-                                    text = { Text(category) },
+                                    text = { Text(category, color = Color.Black) },
                                     onClick = {
                                         onCategoryChange(category)
                                         categoryExpanded = false
@@ -199,6 +207,8 @@ fun PostJobScreen(
                     OutlinedTextField(
                         value = state.draftLocation,
                         onValueChange = onLocationChange,
+                        placeholder = { Text("e.g. Okhla Market Area", color = Color.Gray) },
+                        textStyle = LocalTextStyle.current.copy(color = Color.Black),
                         leadingIcon = {
                             Icon(
                                 imageVector = Icons.Default.LocationOn,
@@ -209,6 +219,8 @@ fun PostJobScreen(
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(10.dp),
                         colors = OutlinedTextFieldDefaults.colors(
+                            focusedTextColor = Color.Black,
+                            unfocusedTextColor = Color.Black,
                             focusedBorderColor = ErnoGreen,
                             unfocusedBorderColor = Color(0xFFE0E0E0),
                             focusedContainerColor = Color.White,
@@ -241,11 +253,15 @@ fun PostJobScreen(
                     OutlinedTextField(
                         value = state.draftDescription,
                         onValueChange = { if (it.length <= 200) onDescriptionChange(it) },
+                        placeholder = { Text("Describe duties, requirements, and store details...", color = Color.Gray) },
+                        textStyle = LocalTextStyle.current.copy(color = Color.Black),
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(100.dp),
                         shape = RoundedCornerShape(10.dp),
                         colors = OutlinedTextFieldDefaults.colors(
+                            focusedTextColor = Color.Black,
+                            unfocusedTextColor = Color.Black,
                             focusedBorderColor = ErnoGreen,
                             unfocusedBorderColor = Color(0xFFE0E0E0),
                             focusedContainerColor = Color.White,

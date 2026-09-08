@@ -139,6 +139,7 @@ fun NavGraph(navController: NavHostController) {
             ShopkeeperDashboardScreen(
                 state = shopkeeperState,
                 onPostNewJobClick = {
+                    shopkeeperViewModel.resetDraft()
                     navController.navigate(Screen.PostJob.route)
                 },
                 onViewAllClick = {
