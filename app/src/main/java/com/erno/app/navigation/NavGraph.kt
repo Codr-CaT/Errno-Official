@@ -199,8 +199,9 @@ fun NavGraph(navController: NavHostController) {
                     navController.popBackStack()
                 },
                 onPostJobClick = {
-                    shopkeeperViewModel.postJob()
-                    navController.navigate("payment_checkout/250?jobTitle=${shopkeeperState.draftTitle.ifBlank { "Job Posting Fee" }}")
+                    val postedJob = shopkeeperViewModel.postJob()
+                    workerViewModel.addJobFromShopkeeper(postedJob)
+                    navController.navigate("payment_checkout/250?jobTitle=${postedJob.title}")
                 }
             )
         }
@@ -417,8 +418,8 @@ fun NavGraph(navController: NavHostController) {
                 transactionId = txnId,
                 amount = amount,
                 onDoneClick = {
-                    navController.navigate(Screen.ShopkeeperHome.route) {
-                        popUpTo(Screen.RoleSelection.route) { inclusive = true }
+                    navController.navigate(Screen.JobSuccess.route) {
+                        popUpTo(Screen.ShopkeeperHome.route)
                     }
                 }
             )

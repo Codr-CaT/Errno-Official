@@ -3,6 +3,7 @@ package com.erno.app.ui.screens.worker
 import androidx.lifecycle.ViewModel
 import com.erno.app.data.model.DurationPay
 import com.erno.app.data.model.EarningRecord
+import com.erno.app.data.model.JobPost
 import com.erno.app.data.model.WorkerJob
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -123,11 +124,32 @@ class WorkerViewModel : ViewModel() {
     fun acceptCurrentJob() {
         val state = _uiState.value
         val currentJob = state.selectedJob ?: return
-        val acceptedJob = currentJob.copy(status = "Upcoming", scheduledTime = "20 May, 11:00 AM")
+        val acceptedJob = currentJob.copy(status = "Upcoming", scheduledTime = "Today, 11:00 AM")
         _uiState.update {
             it.copy(
                 selectedJob = acceptedJob,
                 myJobs = listOf(acceptedJob) + it.myJobs.filter { j -> j.id != acceptedJob.id }
+            )
+        }
+    }
+
+    fun addJobFromShopkeeper(job: JobPost) {
+        val newWorkerJob = WorkerJob(
+            id = job.id,
+            title = job.title,
+            location = job.location,
+            distance = "1.2 km away",
+            description = job.description,
+            isNew = true,
+            payStructure = job.payStructure,
+            selectedHours = job.payStructure.firstOrNull()?.hours ?: 2,
+            selectedPay = job.payStructure.firstOrNull()?.price ?: 189,
+            status = "Available",
+            scheduledTime = "Today, " + job.postedTime
+        )
+        _uiState.update {
+            it.copy(
+                availableJobs = listOf(newWorkerJob) + it.availableJobs.filter { j -> j.id != newWorkerJob.id }
             )
         }
     }

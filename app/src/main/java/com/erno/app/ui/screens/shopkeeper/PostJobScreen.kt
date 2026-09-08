@@ -21,6 +21,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.erno.app.data.model.DurationPay
+import com.erno.app.ui.components.WorkerLocationMapView
 import com.erno.app.ui.theme.ErnoGreen
 import com.erno.app.ui.theme.ErnoTextSecondary
 
@@ -189,7 +190,7 @@ fun PostJobScreen(
             item {
                 Column {
                     Text(
-                        text = "Job Location",
+                        text = "Job Location & Shop Map",
                         fontSize = 13.sp,
                         fontWeight = FontWeight.Medium,
                         color = Color.Black
@@ -214,6 +215,15 @@ fun PostJobScreen(
                             unfocusedContainerColor = Color.White
                         ),
                         singleLine = true
+                    )
+
+                    Spacer(modifier = Modifier.height(10.dp))
+
+                    // Map Location Preview for Shopkeeper
+                    WorkerLocationMapView(
+                        locationName = state.draftLocation.ifBlank { "Okhla Market Area" },
+                        distanceText = "Shop Location Map Pin",
+                        isDarkTheme = false
                     )
                 }
             }
@@ -256,13 +266,13 @@ fun PostJobScreen(
             item {
                 Column {
                     Text(
-                        text = "Working Hours & Pay Structure",
+                        text = "Working Hours & Fixed Time Limit",
                         fontSize = 15.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color.Black
                     )
                     Text(
-                        text = "Set hourly pay for different duration options. Workers will see and choose accordingly.",
+                        text = "Set fixed time limits and hourly pay. Workers will see these exact options.",
                         fontSize = 12.sp,
                         color = ErnoTextSecondary
                     )
@@ -283,7 +293,7 @@ fun PostJobScreen(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = "${item.hours} Hour${if (item.hours > 1) "s" else ""}",
+                            text = "${item.hours} Hour${if (item.hours > 1) "s" else ""} Fixed Limit",
                             fontSize = 14.sp,
                             fontWeight = FontWeight.Medium,
                             color = Color.Black
@@ -327,7 +337,7 @@ fun PostJobScreen(
                     )
                     Spacer(modifier = Modifier.width(6.dp))
                     Text(
-                        text = "Add More Duration",
+                        text = "Add More Fixed Time Options",
                         fontSize = 14.sp,
                         fontWeight = FontWeight.SemiBold,
                         color = ErnoGreen

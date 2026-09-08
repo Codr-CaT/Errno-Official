@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.erno.app.ui.components.WorkerLocationMapView
 import com.erno.app.ui.theme.ErnoGreen
 import com.erno.app.ui.theme.ErnoTextSecondary
 
@@ -137,6 +138,15 @@ fun PreviewJobScreen(
                             )
                         }
 
+                        Spacer(modifier = Modifier.height(12.dp))
+
+                        // Interactive Shop Location Map Preview
+                        WorkerLocationMapView(
+                            locationName = state.draftLocation.ifBlank { "Okhla Market Area" },
+                            distanceText = "Shop Map Preview",
+                            isDarkTheme = false
+                        )
+
                         Spacer(modifier = Modifier.height(16.dp))
 
                         Text(
@@ -152,15 +162,10 @@ fun PreviewJobScreen(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
-                                text = "Pay Structure ",
+                                text = "Fixed Time Options & Pay Structure ",
                                 fontSize = 15.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = Color.Black
-                            )
-                            Text(
-                                text = "(Worker will choose)",
-                                fontSize = 13.sp,
-                                color = Color.Gray
                             )
                         }
 
@@ -174,7 +179,7 @@ fun PreviewJobScreen(
                                 horizontalArrangement = Arrangement.SpaceBetween
                             ) {
                                 Text(
-                                    text = "${item.hours} Hour${if (item.hours > 1) "s" else ""}",
+                                    text = "${item.hours} Hour${if (item.hours > 1) "s" else ""} Limit",
                                     fontSize = 14.sp,
                                     color = Color.Black
                                 )
