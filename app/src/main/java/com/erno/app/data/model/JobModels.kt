@@ -14,7 +14,11 @@ data class JobPost(
     val payStructure: List<DurationPay>,
     val status: String = "Active", // "Active", "Completed"
     val postedTime: String = "Just now",
-    val applicantsCount: Int = 0
+    val applicantsCount: Int = 0,
+    val isDeliveryJob: Boolean = false,
+    val pickupLocation: String = "Shop / Store Location",
+    val dropLocation: String = "Customer Address / Target Location",
+    val packageType: String = "Standard Package"
 )
 
 data class WorkerJob(
@@ -30,7 +34,11 @@ data class WorkerJob(
     val status: String = "Available", // "Available", "Accepting", "Accepted", "Upcoming", "Ongoing", "Completed"
     val scheduledTime: String = "20 May, 11:00 AM",
     val latitude: Double = 28.5355,
-    val longitude: Double = 77.2641
+    val longitude: Double = 77.2641,
+    val isDeliveryJob: Boolean = false,
+    val pickupLocation: String = "Okhla Shop Store",
+    val dropLocation: String = "Sector 15 Noida",
+    val packageType: String = "Grocery / Parcel Delivery"
 )
 
 data class EarningRecord(

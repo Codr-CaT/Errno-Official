@@ -8,6 +8,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.DirectionsBike
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.NotificationsNone
@@ -40,104 +41,111 @@ fun WorkerHomeScreen(
                 contentColor = ErnoGreen
             )
         },
-        containerColor = Color(0xFF0B121F) // Dark Navy theme as seen in bottom row
+        containerColor = Color(0xFF0B121F)
     ) { paddingValues ->
-        LazyColumn(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues)
-                .padding(horizontal = 20.dp, vertical = 12.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+                .padding(paddingValues),
+            contentAlignment = Alignment.TopCenter
         ) {
-            // Header: Greeting & Notification
-            item {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Column {
-                        Text(
-                            text = "Hello, ${state.workerName} 👋",
-                            fontSize = 22.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Color.White
-                        )
-                        Text(
-                            text = "Find work near you",
-                            fontSize = 13.sp,
-                            color = Color.White.copy(alpha = 0.7f)
-                        )
-                    }
-
-                    IconButton(
-                        onClick = { },
-                        modifier = Modifier
-                            .size(40.dp)
-                            .background(Color(0xFF1B2738), CircleShape)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.NotificationsNone,
-                            contentDescription = "Notifications",
-                            tint = Color.White
-                        )
-                    }
-                }
-            }
-
-            // Location Picker Pill
-            item {
-                Surface(
-                    shape = RoundedCornerShape(12.dp),
-                    color = Color(0xFF182436),
-                    modifier = Modifier.fillMaxWidth()
-                ) {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .widthIn(max = 840.dp)
+                    .padding(horizontal = 20.dp, vertical = 12.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                // Header: Greeting & Notification
+                item {
                     Row(
-                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Icon(
-                                imageVector = Icons.Default.LocationOn,
-                                contentDescription = null,
-                                tint = ErnoGreen,
-                                modifier = Modifier.size(18.dp)
-                            )
-                            Spacer(modifier = Modifier.width(8.dp))
+                        Column {
                             Text(
-                                text = state.currentLocation,
-                                fontSize = 14.sp,
-                                fontWeight = FontWeight.Medium,
+                                text = "Hello, ${state.workerName} 👋",
+                                fontSize = 22.sp,
+                                fontWeight = FontWeight.Bold,
                                 color = Color.White
                             )
+                            Text(
+                                text = "Find work & delivery shifts near you",
+                                fontSize = 13.sp,
+                                color = Color.White.copy(alpha = 0.7f)
+                            )
                         }
-                        Icon(
-                            imageVector = Icons.Default.KeyboardArrowDown,
-                            contentDescription = null,
-                            tint = Color.White
-                        )
+
+                        IconButton(
+                            onClick = { },
+                            modifier = Modifier
+                                .size(40.dp)
+                                .background(Color(0xFF1B2738), CircleShape)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.NotificationsNone,
+                                contentDescription = "Notifications",
+                                tint = Color.White
+                            )
+                        }
                     }
                 }
-            }
 
-            // Section Header
-            item {
-                Text(
-                    text = "Available Jobs Near You",
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.White,
-                    modifier = Modifier.padding(top = 8.dp)
-                )
-            }
+                // Location Picker Pill
+                item {
+                    Surface(
+                        shape = RoundedCornerShape(12.dp),
+                        color = Color(0xFF182436),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Row(
+                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Icon(
+                                    imageVector = Icons.Default.LocationOn,
+                                    contentDescription = null,
+                                    tint = ErnoGreen,
+                                    modifier = Modifier.size(18.dp)
+                                )
+                                Spacer(modifier = Modifier.width(8.dp))
+                                Text(
+                                    text = state.currentLocation,
+                                    fontSize = 14.sp,
+                                    fontWeight = FontWeight.Medium,
+                                    color = Color.White
+                                )
+                            }
+                            Icon(
+                                imageVector = Icons.Default.KeyboardArrowDown,
+                                contentDescription = null,
+                                tint = Color.White
+                            )
+                        }
+                    }
+                }
 
-            // Available Job Cards
-            items(state.availableJobs) { job ->
-                WorkerAvailableJobCard(
-                    job = job,
-                    onClick = { onJobSelect(job) }
-                )
+                // Section Header
+                item {
+                    Text(
+                        text = "Available Jobs & Deliveries",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.White,
+                        modifier = Modifier.padding(top = 8.dp)
+                    )
+                }
+
+                // Available Job Cards
+                items(state.availableJobs) { job ->
+                    WorkerAvailableJobCard(
+                        job = job,
+                        onClick = { onJobSelect(job) }
+                    )
+                }
             }
         }
     }
@@ -166,14 +174,40 @@ fun WorkerAvailableJobCard(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
-                    text = job.title,
-                    fontSize = 17.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.Black
-                )
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        text = job.title,
+                        fontSize = 17.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black
+                    )
+                }
 
-                if (job.isNew) {
+                if (job.isDeliveryJob) {
+                    Surface(
+                        shape = RoundedCornerShape(10.dp),
+                        color = Color(0xFFE3F2FD)
+                    ) {
+                        Row(
+                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Filled.DirectionsBike,
+                                contentDescription = null,
+                                tint = Color(0xFF1976D2),
+                                modifier = Modifier.size(12.dp)
+                            )
+                            Spacer(modifier = Modifier.width(4.dp))
+                            Text(
+                                text = "Delivery",
+                                fontSize = 11.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Color(0xFF1976D2)
+                            )
+                        }
+                    }
+                } else if (job.isNew) {
                     Surface(
                         shape = RoundedCornerShape(10.dp),
                         color = Color(0xFFEAF5D8)
@@ -210,6 +244,27 @@ fun WorkerAvailableJobCard(
                         fontSize = 13.sp,
                         color = Color.Gray
                     )
+                }
+            }
+
+            if (job.isDeliveryJob) {
+                Spacer(modifier = Modifier.height(8.dp))
+                Surface(
+                    shape = RoundedCornerShape(8.dp),
+                    color = Color(0xFFF8F9FA)
+                ) {
+                    Column(modifier = Modifier.padding(8.dp)) {
+                        Text(
+                            text = "📦 Pickup: ${job.pickupLocation}",
+                            fontSize = 11.sp,
+                            color = Color.DarkGray
+                        )
+                        Text(
+                            text = "📍 Drop: ${job.dropLocation}",
+                            fontSize = 11.sp,
+                            color = Color.DarkGray
+                        )
+                    }
                 }
             }
 

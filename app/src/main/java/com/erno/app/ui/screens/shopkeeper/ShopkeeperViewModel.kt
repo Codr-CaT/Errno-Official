@@ -14,6 +14,24 @@ data class ShopkeeperState(
     val totalApplicationsCount: Int = 34,
     val recentJobs: List<JobPost> = listOf(
         JobPost(
+            id = "dp_1",
+            title = "Express Delivery Partner",
+            category = "Delivery Partner",
+            location = "Okhla Store -> Sector 18 Noida",
+            description = "Deliver package from shop to customer address within 2 hours.",
+            payStructure = listOf(
+                DurationPay(1, 149),
+                DurationPay(2, 249)
+            ),
+            status = "Active",
+            postedTime = "Posted 30m ago",
+            applicantsCount = 4,
+            isDeliveryJob = true,
+            pickupLocation = "Okhla Market Store #12",
+            dropLocation = "Flat 402, Sector 18 Noida",
+            packageType = "Electronics Parcel"
+        ),
+        JobPost(
             id = "1",
             title = "Shop Helper",
             category = "Shop Helper",
@@ -44,36 +62,22 @@ data class ShopkeeperState(
             status = "Active",
             postedTime = "Posted 1d ago",
             applicantsCount = 3
-        ),
-        JobPost(
-            id = "3",
-            title = "Store Assistant",
-            category = "Store Assistant",
-            location = "Okhla Market Area",
-            description = "Assisting in inventory management and restocking shelves.",
-            payStructure = listOf(
-                DurationPay(1, 99),
-                DurationPay(2, 189)
-            ),
-            status = "Active",
-            postedTime = "Posted 3d ago",
-            applicantsCount = 2
         )
     ),
     // Draft job for creation
-    val draftTitle: String = "Shop Helper",
-    val draftCategory: String = "Shop Helper",
+    val draftTitle: String = "Delivery Partner",
+    val draftCategory: String = "Delivery Partner",
     val draftLocation: String = "Okhla Market Area",
-    val draftDescription: String = "Need a shop helper for assisting in customer handling and store work.",
+    val draftPickupLocation: String = "Okhla Market Store #12",
+    val draftDropLocation: String = "Sector 18 Noida",
+    val draftPackageType: String = "Parcel / Product Box",
+    val draftIsDelivery: Boolean = true,
+    val draftDescription: String = "Deliver parcel/products safely from shop to target location.",
     val draftPayStructure: List<DurationPay> = listOf(
-        DurationPay(1, 99),
-        DurationPay(2, 189),
-        DurationPay(3, 279),
-        DurationPay(4, 349),
-        DurationPay(5, 419),
-        DurationPay(6, 489),
-        DurationPay(7, 559),
-        DurationPay(8, 629)
+        DurationPay(1, 149),
+        DurationPay(2, 249),
+        DurationPay(3, 349),
+        DurationPay(4, 449)
     ),
     val lastPostedJob: JobPost? = null
 )
@@ -87,11 +91,30 @@ class ShopkeeperViewModel : ViewModel() {
     }
 
     fun updateCategory(category: String) {
-        _uiState.update { it.copy(draftCategory = category) }
+        val isDelivery = category.equals("Delivery Partner", ignoreCase = true) || category.contains("Delivery", ignoreCase = true)
+        _uiState.update {
+            it.copy(
+                draftCategory = category,
+                draftIsDelivery = isDelivery,
+                draftTitle = if (isDelivery) "Delivery Partner" else it.draftTitle
+            )
+        }
     }
 
     fun updateLocation(location: String) {
         _uiState.update { it.copy(draftLocation = location) }
+    }
+
+    fun updatePickupLocation(pickup: String) {
+        _uiState.update { it.copy(draftPickupLocation = pickup) }
+    }
+
+    fun updateDropLocation(drop: String) {
+        _uiState.update { it.copy(draftDropLocation = drop) }
+    }
+
+    fun updatePackageType(packageType: String) {
+        _uiState.update { it.copy(draftPackageType = packageType) }
     }
 
     fun updateDescription(description: String) {
@@ -101,19 +124,19 @@ class ShopkeeperViewModel : ViewModel() {
     fun resetDraft() {
         _uiState.update {
             it.copy(
-                draftTitle = "Shop Helper",
-                draftCategory = "Shop Helper",
+                draftTitle = "Delivery Partner",
+                draftCategory = "Delivery Partner",
                 draftLocation = "Okhla Market Area",
-                draftDescription = "Need a shop helper for assisting in customer handling and store work.",
+                draftPickupLocation = "Okhla Market Store #12",
+                draftDropLocation = "Sector 18 Noida",
+                draftPackageType = "Parcel / Product Box",
+                draftIsDelivery = true,
+                draftDescription = "Deliver parcel/products safely from shop to target location.",
                 draftPayStructure = listOf(
-                    DurationPay(1, 99),
-                    DurationPay(2, 189),
-                    DurationPay(3, 279),
-                    DurationPay(4, 349),
-                    DurationPay(5, 419),
-                    DurationPay(6, 489),
-                    DurationPay(7, 559),
-                    DurationPay(8, 629)
+                    DurationPay(1, 149),
+                    DurationPay(2, 249),
+                    DurationPay(3, 349),
+                    DurationPay(4, 449)
                 )
             )
         }
@@ -146,14 +169,18 @@ class ShopkeeperViewModel : ViewModel() {
         val state = _uiState.value
         val newJob = JobPost(
             id = System.currentTimeMillis().toString(),
-            title = state.draftTitle.ifBlank { "Shop Helper" },
-            category = state.draftCategory.ifBlank { "Shop Helper" },
+            title = state.draftTitle.ifBlank { "Delivery Partner" },
+            category = state.draftCategory.ifBlank { "Delivery Partner" },
             location = state.draftLocation.ifBlank { "Okhla Market Area" },
-            description = state.draftDescription.ifBlank { "Need a shop helper for store work." },
-            payStructure = if (state.draftPayStructure.isNotEmpty()) state.draftPayStructure else listOf(DurationPay(1, 99), DurationPay(2, 189)),
+            description = state.draftDescription.ifBlank { "Deliver parcel/products safely." },
+            payStructure = if (state.draftPayStructure.isNotEmpty()) state.draftPayStructure else listOf(DurationPay(1, 149), DurationPay(2, 249)),
             status = "Active",
             postedTime = "Posted just now",
-            applicantsCount = 0
+            applicantsCount = 0,
+            isDeliveryJob = state.draftIsDelivery,
+            pickupLocation = state.draftPickupLocation,
+            dropLocation = state.draftDropLocation,
+            packageType = state.draftPackageType
         )
         _uiState.update {
             it.copy(

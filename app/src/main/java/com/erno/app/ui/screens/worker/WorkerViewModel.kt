@@ -16,6 +16,23 @@ data class WorkerState(
     val totalEarnings: Int = 1247,
     val availableJobs: List<WorkerJob> = listOf(
         WorkerJob(
+            id = "w_delivery_1",
+            title = "Express Delivery Partner",
+            location = "Okhla Market to Sector 18 Noida",
+            distance = "1.8 km away",
+            description = "Deliver grocery & parcel items from Okhla Store to Sector 18 Noida address safely.",
+            isNew = true,
+            isDeliveryJob = true,
+            pickupLocation = "Okhla Market Store #12",
+            dropLocation = "Flat 402, Sector 18 Noida",
+            packageType = "Parcel Box (2.5 kg)",
+            payStructure = listOf(
+                DurationPay(1, 149),
+                DurationPay(2, 249),
+                DurationPay(3, 349)
+            )
+        ),
+        WorkerJob(
             id = "w1",
             title = "Shop Helper",
             location = "Okhla Market Area",
@@ -26,11 +43,7 @@ data class WorkerState(
                 DurationPay(1, 99),
                 DurationPay(2, 189),
                 DurationPay(3, 279),
-                DurationPay(4, 349),
-                DurationPay(5, 419),
-                DurationPay(6, 489),
-                DurationPay(7, 559),
-                DurationPay(8, 629)
+                DurationPay(4, 349)
             )
         ),
         WorkerJob(
@@ -43,20 +56,7 @@ data class WorkerState(
             payStructure = listOf(
                 DurationPay(1, 99),
                 DurationPay(2, 189),
-                DurationPay(3, 279),
-                DurationPay(4, 349)
-            )
-        ),
-        WorkerJob(
-            id = "w3",
-            title = "Store Assistant",
-            location = "Okhla Market Area",
-            distance = "2.7 km away",
-            description = "Assisting in inventory management and restocking shelves.",
-            isNew = false,
-            payStructure = listOf(
-                DurationPay(1, 99),
-                DurationPay(2, 189)
+                DurationPay(3, 279)
             )
         )
     ),
@@ -64,45 +64,37 @@ data class WorkerState(
     val myJobs: List<WorkerJob> = listOf(
         WorkerJob(
             id = "w1_assigned",
+            title = "Express Delivery Partner",
+            location = "Okhla Market Store to Sector 18 Noida",
+            distance = "1.8 km away",
+            description = "Deliver grocery & parcel items from Okhla Store to Sector 18 Noida address safely.",
+            selectedHours = 1,
+            selectedPay = 149,
+            status = "Upcoming",
+            scheduledTime = "20 May, 11:00 AM",
+            isDeliveryJob = true,
+            pickupLocation = "Okhla Market Store #12",
+            dropLocation = "Flat 402, Sector 18 Noida",
+            packageType = "Grocery / Parcel Box",
+            payStructure = listOf(DurationPay(1, 149))
+        ),
+        WorkerJob(
+            id = "w2_assigned",
             title = "Shop Helper",
             location = "Okhla Market Area",
             distance = "2.1 km away",
             description = "Need a shop helper for assisting in customer handling and store work.",
             selectedHours = 2,
             selectedPay = 189,
-            status = "Upcoming",
-            scheduledTime = "20 May, 11:00 AM",
-            payStructure = listOf(DurationPay(2, 189))
-        ),
-        WorkerJob(
-            id = "w2_assigned",
-            title = "Counter Staff",
-            location = "Okhla Market Area",
-            distance = "2.4 km away",
-            description = "Counter staff required for billing and customer query support.",
-            selectedHours = 4,
-            selectedPay = 349,
             status = "Completed",
             scheduledTime = "18 May, 10:00 AM",
-            payStructure = listOf(DurationPay(4, 349))
-        ),
-        WorkerJob(
-            id = "w3_assigned",
-            title = "Store Assistant",
-            location = "Okhla Market Area",
-            distance = "2.7 km away",
-            description = "Assisting in inventory management and restocking shelves.",
-            selectedHours = 3,
-            selectedPay = 279,
-            status = "Completed",
-            scheduledTime = "15 May, 02:00 PM",
-            payStructure = listOf(DurationPay(3, 279))
+            payStructure = listOf(DurationPay(2, 189))
         )
     ),
     val earningsHistory: List<EarningRecord> = listOf(
-        EarningRecord("e1", "Shop Helper", "2 Hours", "20 May, 2025", 189),
-        EarningRecord("e2", "Counter Staff", "4 Hours", "18 May, 2025", 349),
-        EarningRecord("e3", "Store Assistant", "3 Hours", "15 May, 2025", 279)
+        EarningRecord("e1", "Express Delivery Partner", "1 Hour", "20 May, 2025", 149),
+        EarningRecord("e2", "Shop Helper", "2 Hours", "18 May, 2025", 189),
+        EarningRecord("e3", "Counter Staff", "4 Hours", "15 May, 2025", 349)
     )
 )
 
@@ -142,10 +134,14 @@ class WorkerViewModel : ViewModel() {
             description = job.description,
             isNew = true,
             payStructure = job.payStructure,
-            selectedHours = job.payStructure.firstOrNull()?.hours ?: 2,
-            selectedPay = job.payStructure.firstOrNull()?.price ?: 189,
+            selectedHours = job.payStructure.firstOrNull()?.hours ?: 1,
+            selectedPay = job.payStructure.firstOrNull()?.price ?: 149,
             status = "Available",
-            scheduledTime = "Today, " + job.postedTime
+            scheduledTime = "Today, " + job.postedTime,
+            isDeliveryJob = job.isDeliveryJob,
+            pickupLocation = job.pickupLocation,
+            dropLocation = job.dropLocation,
+            packageType = job.packageType
         )
         _uiState.update {
             it.copy(
