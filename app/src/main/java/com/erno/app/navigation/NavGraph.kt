@@ -227,6 +227,10 @@ fun NavGraph(navController: NavHostController) {
                 onBackClick = {
                     navController.popBackStack()
                 },
+                onPayWorkerClick = { job ->
+                    val amount = job.payStructure.maxOfOrNull { it.price } ?: 349
+                    navController.navigate("payment_checkout/$amount?jobTitle=${job.title}")
+                },
                 onNavigateTab = { tab ->
                     when (tab) {
                         ShopkeeperTab.HOME -> navController.navigate(Screen.ShopkeeperHome.route)

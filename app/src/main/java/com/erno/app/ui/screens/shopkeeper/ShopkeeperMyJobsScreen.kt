@@ -3,8 +3,11 @@ package com.erno.app.ui.screens.shopkeeper
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.CreditCard
+import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.*
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.runtime.*
@@ -14,6 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.erno.app.data.model.JobPost
 import com.erno.app.ui.components.ShopkeeperBottomNavigation
 import com.erno.app.ui.components.ShopkeeperTab
 import com.erno.app.ui.theme.ErnoGreen
@@ -23,7 +27,8 @@ import com.erno.app.ui.theme.ErnoGreen
 fun ShopkeeperMyJobsScreen(
     state: ShopkeeperState,
     onBackClick: () -> Unit,
-    onNavigateTab: (ShopkeeperTab) -> Unit
+    onNavigateTab: (ShopkeeperTab) -> Unit,
+    onPayWorkerClick: (JobPost) -> Unit = {}
 ) {
     var selectedTabIndex by remember { mutableIntStateOf(1) } // 0: All, 1: Active, 2: Completed
 
@@ -143,11 +148,139 @@ fun ShopkeeperMyJobsScreen(
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
                     items(filteredJobs) { job ->
-                        JobCardItem(job = job)
+                        ShopkeeperJobManageCard(
+                            job = job,
+                            onPayWorkerClick = { onPayWorkerClick(job) }
+                        )
                     }
                     item {
                         Spacer(modifier = Modifier.height(16.dp))
                     }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun ShopkeeperJobManageCard(
+    job: JobPost,
+    onPayWorkerClick: () -> Unit = {}
+) {
+    val maxPrice = job.payStructure.maxOfOrNull { it.price } ?: 349
+
+    Surface(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(16.dp),
+        color = Color.White,
+        shadowElevation = 1.dp
+    ) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = job.title,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black
+                )
+
+                if (job.status == "Active") {
+                    Surface(
+                        shape = RoundedCornerShape(12.dp),
+                        color = Color(0xFFE8F5E9)
+                    ) {
+                        Text(
+                            text = "Active",
+                            fontSize = 11.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color(0xFF2E7D32),
+                            modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
+                        )
+                    }
+                } else {
+                    Surface(
+                        shape = RoundedCornerShape(12.dp),
+                        color = Color(0xFFEAF5D8)
+                    ) {
+                        Text(
+                            text = "Work Completed",
+                            fontSize = 11.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = ErnoGreen,
+                            modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
+                        )
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(6.dp))
+
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    imageVector = Icons.Default.LocationOn,
+                    contentDescription = null,
+                    tint = Color.Gray,
+                    modifier = Modifier.size(14.dp)
+                )
+                Spacer(modifier = Modifier.width(4.dp))
+                Text(
+                    text = job.location,
+                    fontSize = 13.sp,
+                    color = Color.Gray
+                )
+            }
+
+            Spacer(modifier = Modifier.height(10.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "Settlement Pay: ₹$maxPrice",
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black
+                )
+
+                Text(
+                    text = job.postedTime,
+                    fontSize = 11.sp,
+                    color = Color.Gray
+                )
+            }
+
+            if (job.status == "Completed" || job.applicantsCount > 0) {
+                Spacer(modifier = Modifier.height(12.dp))
+                HorizontalDivider(color = Color(0xFFF0F0F0))
+                Spacer(modifier = Modifier.height(12.dp))
+
+                Button(
+                    onClick = onPayWorkerClick,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(46.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = ErnoGreen),
+                    shape = RoundedCornerShape(10.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.CreditCard,
+                        contentDescription = null,
+                        tint = Color.White,
+                        modifier = Modifier.size(18.dp)
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = "Pay Worker ₹$maxPrice (Job Completed)",
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.White
+                    )
                 }
             }
         }
