@@ -14,6 +14,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
@@ -47,6 +48,7 @@ fun PostJobScreen(
     onPackageTypeChange: (String) -> Unit = {},
     onDescriptionChange: (String) -> Unit,
     onRemoveDuration: (DurationPay) -> Unit,
+    onToggleDuration: (hours: Int, price: Int) -> Unit = { _, _ -> },
     onAddMoreDurationClick: () -> Unit,
     onPreviewJobClick: () -> Unit
 ) {
@@ -54,8 +56,8 @@ fun PostJobScreen(
     var categoryExpanded by remember { mutableStateOf(false) }
     val categories = listOf("Delivery Partner", "Shop Helper", "Counter Staff", "Store Assistant", "Packing Staff", "Delivery Boy", "Cashier")
 
-    // Standard hours list with estimated rates
-    val availableHourOptions = listOf(
+    // Standard multiple choice duration options
+    val multipleChoiceHours = listOf(
         DurationPay(1, 149),
         DurationPay(2, 249),
         DurationPay(3, 349),
@@ -78,7 +80,7 @@ fun PostJobScreen(
                         Text(
                             text = "Step $currentStep of 3 • " + when (currentStep) {
                                 1 -> "Basic Details"
-                                2 -> "Select Time & Hours"
+                                2 -> "Select Duration Needed"
                                 else -> "Location & Map"
                             },
                             fontSize = 12.sp,
@@ -151,7 +153,7 @@ fun PostJobScreen(
                     ) {
                         Text(
                             text = when (currentStep) {
-                                1 -> "Next: Select Time →"
+                                1 -> "Next: Select Duration →"
                                 2 -> "Next: Location →"
                                 else -> "Preview & Post →"
                             },
@@ -178,7 +180,7 @@ fun PostJobScreen(
                     .padding(horizontal = 20.dp, vertical = 12.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                val steps = listOf("1. Details", "2. Select Time", "3. Map Location")
+                val steps = listOf("1. Details", "2. Duration Needed", "3. Map Location")
                 steps.forEachIndexed { index, title ->
                     val stepNum = index + 1
                     val isActive = currentStep >= stepNum
@@ -356,31 +358,33 @@ fun PostJobScreen(
                         }
                     }
 
-                    // STEP 2: TIME & HOURS SELECTION WITH "SELECT / SELECTED" BUTTONS
+                    // STEP 2: MULTIPLE CHOICE DURATION SELECTION
                     if (currentStep == 2) {
                         item {
                             Column {
                                 Text(
-                                    text = "Select Time Limit & Hours Needed",
+                                    text = "How much time do you need the worker for?",
                                     fontSize = 16.sp,
                                     fontWeight = FontWeight.Bold,
                                     color = Color.Black
                                 )
                                 Text(
-                                    text = "Tap the Select button on the time duration options you want workers to choose from.",
+                                    text = "Select one or multiple duration options below for workers to choose from:",
                                     fontSize = 12.sp,
                                     color = ErnoTextSecondary
                                 )
                             }
                         }
 
-                        // Available Hour Duration Option Cards
-                        items(availableHourOptions) { option ->
+                        // Multiple Choice Checklist Cards
+                        items(multipleChoiceHours) { option ->
                             val isSelected = state.draftPayStructure.any { it.hours == option.hours }
                             val currentPayItem = state.draftPayStructure.find { it.hours == option.hours } ?: option
 
                             Surface(
-                                modifier = Modifier.fillMaxWidth(),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clickable { onToggleDuration(option.hours, option.price) },
                                 shape = RoundedCornerShape(14.dp),
                                 color = Color.White,
                                 border = BorderStroke(
@@ -396,25 +400,20 @@ fun PostJobScreen(
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
                                     Row(verticalAlignment = Alignment.CenterVertically) {
-                                        Box(
-                                            modifier = Modifier
-                                                .size(36.dp)
-                                                .background(if (isSelected) Color(0xFFEAF5D8) else Color(0xFFF5F5F5), CircleShape),
-                                            contentAlignment = Alignment.Center
-                                        ) {
-                                            Icon(
-                                                imageVector = Icons.Default.Schedule,
-                                                contentDescription = null,
-                                                tint = if (isSelected) ErnoGreen else Color.Gray,
-                                                modifier = Modifier.size(20.dp)
+                                        Checkbox(
+                                            checked = isSelected,
+                                            onCheckedChange = { onToggleDuration(option.hours, option.price) },
+                                            colors = CheckboxDefaults.colors(
+                                                checkedColor = ErnoGreen,
+                                                checkmarkColor = Color.White
                                             )
-                                        }
+                                        )
 
-                                        Spacer(modifier = Modifier.width(12.dp))
+                                        Spacer(modifier = Modifier.width(8.dp))
 
                                         Column {
                                             Text(
-                                                text = "${option.hours} Hour${if (option.hours > 1) "s" else ""} Duration",
+                                                text = "${option.hours} Hour${if (option.hours > 1) "s" else ""}" + if (option.hours == 8) " (Full Shift)" else "",
                                                 fontSize = 15.sp,
                                                 fontWeight = FontWeight.Bold,
                                                 color = Color.Black
@@ -427,48 +426,36 @@ fun PostJobScreen(
                                         }
                                     }
 
-                                    // SELECT / SELECTED BUTTON
                                     if (isSelected) {
-                                        Button(
-                                            onClick = { onRemoveDuration(currentPayItem) },
-                                            colors = ButtonDefaults.buttonColors(containerColor = ErnoGreen),
-                                            shape = RoundedCornerShape(10.dp),
-                                            contentPadding = PaddingValues(horizontal = 14.dp, vertical = 6.dp)
+                                        Surface(
+                                            shape = RoundedCornerShape(8.dp),
+                                            color = Color(0xFFEAF5D8)
                                         ) {
-                                            Icon(
-                                                imageVector = Icons.Default.Check,
-                                                contentDescription = null,
-                                                tint = Color.White,
-                                                modifier = Modifier.size(16.dp)
-                                            )
-                                            Spacer(modifier = Modifier.width(4.dp))
-                                            Text(
-                                                text = "Selected",
-                                                fontSize = 13.sp,
-                                                fontWeight = FontWeight.Bold,
-                                                color = Color.White
-                                            )
-                                        }
-                                    } else {
-                                        OutlinedButton(
-                                            onClick = { onAddMoreDurationClick() },
-                                            shape = RoundedCornerShape(10.dp),
-                                            border = BorderStroke(1.dp, ErnoGreen),
-                                            contentPadding = PaddingValues(horizontal = 14.dp, vertical = 6.dp)
-                                        ) {
-                                            Text(
-                                                text = "+ Select",
-                                                fontSize = 13.sp,
-                                                fontWeight = FontWeight.Bold,
-                                                color = ErnoGreen
-                                            )
+                                            Row(
+                                                modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp),
+                                                verticalAlignment = Alignment.CenterVertically
+                                            ) {
+                                                Icon(
+                                                    imageVector = Icons.Default.Check,
+                                                    contentDescription = null,
+                                                    tint = ErnoGreen,
+                                                    modifier = Modifier.size(14.dp)
+                                                )
+                                                Spacer(modifier = Modifier.width(4.dp))
+                                                Text(
+                                                    text = "Selected",
+                                                    fontSize = 12.sp,
+                                                    fontWeight = FontWeight.Bold,
+                                                    color = ErnoGreen
+                                                )
+                                            }
                                         }
                                     }
                                 }
                             }
                         }
 
-                        // Add Custom Time Limit Option Button
+                        // Add Custom Hour Button
                         item {
                             Surface(
                                 modifier = Modifier
@@ -491,7 +478,7 @@ fun PostJobScreen(
                                     )
                                     Spacer(modifier = Modifier.width(6.dp))
                                     Text(
-                                        text = "+ Select Custom Time Limit & Pay",
+                                        text = "+ Add Custom Time Duration & Pay",
                                         fontSize = 14.sp,
                                         fontWeight = FontWeight.Bold,
                                         color = ErnoGreen

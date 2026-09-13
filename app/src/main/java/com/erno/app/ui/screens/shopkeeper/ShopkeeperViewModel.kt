@@ -142,6 +142,18 @@ class ShopkeeperViewModel : ViewModel() {
         }
     }
 
+    fun toggleDurationPay(hours: Int, defaultPrice: Int) {
+        _uiState.update { state ->
+            val exists = state.draftPayStructure.any { it.hours == hours }
+            val updatedList = if (exists) {
+                state.draftPayStructure.filter { it.hours != hours }
+            } else {
+                (state.draftPayStructure + DurationPay(hours, defaultPrice)).sortedBy { it.hours }
+            }
+            state.copy(draftPayStructure = updatedList)
+        }
+    }
+
     fun removeDurationPay(item: DurationPay) {
         _uiState.update { state ->
             itCopy(state, draftPayStructure = state.draftPayStructure.filter { dp -> dp.hours != item.hours })

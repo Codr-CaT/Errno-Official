@@ -165,8 +165,12 @@ fun NavGraph(navController: NavHostController) {
                 onTitleChange = shopkeeperViewModel::updateTitle,
                 onCategoryChange = shopkeeperViewModel::updateCategory,
                 onLocationChange = shopkeeperViewModel::updateLocation,
+                onPickupLocationChange = shopkeeperViewModel::updatePickupLocation,
+                onDropLocationChange = shopkeeperViewModel::updateDropLocation,
+                onPackageTypeChange = shopkeeperViewModel::updatePackageType,
                 onDescriptionChange = shopkeeperViewModel::updateDescription,
                 onRemoveDuration = shopkeeperViewModel::removeDurationPay,
+                onToggleDuration = shopkeeperViewModel::toggleDurationPay,
                 onAddMoreDurationClick = {
                     navController.navigate(Screen.PayStructure.route)
                 },
