@@ -105,7 +105,76 @@ app/src/main/java/com/erno/app/
 
 ---
 
-## 🔄 3. Frontend Workflows & Screen Transitions
+## 🎨 3. Design System Tokens: Color Palette, Theme & Typography
+
+### A. Color Palette (`ui/theme/Color.kt`)
+
+| Color Token Name | Hex Code | Visual Swatch | Primary Role / Usage |
+| :--- | :--- | :--- | :--- |
+| **`ErnoGreen`** | `#11382A` / `#5B9600` | 🟢 Dark Green | Primary Action Buttons, Selected State Borders, Top Bars |
+| **`ErnoLime`** | `#A4E637` | 🟢 Bright Lime | Secondary Accent Highlights, Role Selection Cards, Active Tab Indicators |
+| **`ErnoGreenLight`** | `#EAF5D8` | 🟢 Light Mint | Badge Backgrounds, Success Indicators, Soft Container Tints |
+| **`ErnoNavy`** | `#0B121F` | 🔵 Dark Navy | Worker Theme Backgrounds, Splash Screen Surface, Dark Top Bars |
+| **`ErnoBackground`** | `#F8F9FA` | ⚪ Off-White | Application Background Color for Light Mode |
+| **`ErnoSurface`** | `#FFFFFF` | ⚪ Pure White | Card Surfaces, Dialogs, Dropdown Containers, Inputs |
+| **`ErnoTextPrimary`** | `#0B121F` | ⬛ Deep Charcoal | High-emphasis Headlines, Card Titles, Main Body Text |
+| **`ErnoTextSecondary`** | `#6C757D` | 🩶 Cool Gray | Subtitles, Helper Notes, Placeholders, Form Labels |
+| **`ErnoInfoBackground`** | `#FFF9E6` | 🟡 Soft Amber | Info Banners, Warning Notices |
+| **`ErnoInfoBorder`** | `#FFEBB3` | 🟡 Light Gold | Border strokes for Alert Containers |
+
+---
+
+### B. Material 3 Theme Specification (`ui/theme/Theme.kt`)
+
+The application defines a custom Material 3 Theme wrapper **`ErnoTheme`**:
+
+```kotlin
+@Composable
+fun ErnoTheme(
+    darkTheme: Boolean = isSystemInDarkTheme(),
+    dynamicColor: Boolean = false, // Disabled to preserve consistent ERNO branding
+    content: @Composable () -> Unit
+)
+```
+
+#### Color Schemes Definition:
+* **Light Color Scheme (`LightColorScheme`)**:
+  - `primary`: `ErnoLime` (`#A4E637`)
+  - `secondary`: `ErnoNavy` (`#0B121F`)
+  - `background`: `ErnoBackground` (`#F8F9FA`)
+  - `surface`: `ErnoSurface` (`#FFFFFF`)
+  - `onPrimary`: `ErnoNavy` (`#0B121F`)
+  - `onBackground`: `ErnoTextPrimary` (`#0B121F`)
+  - `onSurface`: `ErnoTextPrimary` (`#0B121F`)
+
+* **Dark Color Scheme (`DarkColorScheme`)**:
+  - `primary`: `ErnoLime` (`#A4E637`)
+  - `secondary`: `ErnoNavy` (`#0B121F`)
+  - `background`: `ErnoNavy` (`#0B121F`)
+  - `surface`: `ErnoNavy` (`#0B121F`)
+  - `onPrimary`: `ErnoNavy` (`#0B121F`)
+  - `onSecondary`: `Color.White`
+  - `onBackground`: `Color.White`
+  - `onSurface`: `Color.White`
+
+---
+
+### C. Typography & Font Specifications (`ui/theme/Type.kt`)
+
+The typography uses clean system sans-serif scaling through Material 3 `Typography`:
+
+| Type Scale Role | Font Weight | Font Size | Line Height | Letter Spacing | Usage Area |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **Headline Large** | `Bold` (`FontWeight.W700`) | `32.sp` | `40.sp` | `0.sp` | Main Earnings Numbers, Hero Numbers |
+| **Title Large** | `Bold` (`FontWeight.W700`) | `22.sp` – `24.sp` | `28.sp` – `32.sp` | `0.sp` | Screen Headers, Splash Titles |
+| **Title Medium** | `Bold` (`FontWeight.W700`) | `18.sp` – `20.sp` | `24.sp` – `26.sp` | `0.15.sp` | Card Titles, Section Headers |
+| **Body Large** | `Normal` (`FontWeight.W400`) | `16.sp` | `24.sp` | `0.5.sp` | Primary Text Fields, Form Inputs |
+| **Body Medium** | `Medium` (`FontWeight.W500`) | `14.sp` | `20.sp` | `0.25.sp` | Secondary Body, Descriptions |
+| **Label Small / Badge**| `Bold` (`FontWeight.W700`) | `11.sp` – `12.sp` | `16.sp` | `0.5.sp` | Status Badges (Active, Completed, Delivery) |
+
+---
+
+## 🔄 4. Frontend Workflows & Screen Transitions
 
 ### Workflow 1: Application Entry & Authentication
 
@@ -229,15 +298,8 @@ app/src/main/java/com/erno/app/
 
 ---
 
-## 🎨 4. Design System Tokens & Components
+## 🧩 5. Common UI Components (`ui/components/`)
 
-### Color Tokens (`Color.kt`):
-- **`ErnoGreen`** (`#11382A` / `#0D3325`): Primary brand color for buttons, top bars, selected borders.
-- **`ErnoLime`** (`#80C342` / `#6BB032`): Secondary brand accent for highlights, role badges, active tab indicators.
-- **`ErnoNavy`** (`#0B121F` / `#0E1726`): Dark background theme for worker screens and bottom navigation.
-- **`ErnoTextSecondary`** (`#666666`): Subtitles, helper text, and placeholders.
-
-### Common Composables (`ui/components/`):
 - **`ErnoLogo`**: Standard official brand logo element.
 - **`GoogleSignInButton`**: Standard white border container button with official Google 'G' brand styling.
 - **`WorkerLocationMapView`**: Custom Jetpack Compose Canvas rendering main roads, dashed route paths, start/destination pins, and Google Maps intent launcher.
@@ -245,8 +307,8 @@ app/src/main/java/com/erno/app/
 
 ---
 
-## 🧪 5. Testing & Verification Summary
+## 🧪 6. Testing & Verification Summary
 
 - **Compilation**: `gradle_build("app:compileDebugKotlin")` — **PASSED (0 Errors)**.
 - **Orientation Responsiveness**: Tested in portrait, landscape, and tablet screen dimensions (`widthIn(max = 840.dp)`).
-- **Git Branch Status**: All frontend architecture and workflow updates pushed to branch **`Mayank`**.
+- **Git Branch Status**: All frontend architecture, theme tokens, and workflow updates pushed to branch **`Mayank`**.
